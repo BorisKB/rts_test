@@ -16,13 +16,12 @@ public class UnitCanvasInfo : MonoBehaviour
     {
         _UnitName = NameGiver.GetRandomNameUnit();
         _UnitNickname = NameGiver.GetRandomNicknameUnit();
-        _LeftPanelUnitNameText.text = _UnitName + " " + _UnitNickname;   
+        _LeftPanelUnitNameText.text = _UnitName;   
         _LeftPanelImage.sprite = _LeftPanelUnitIcon;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetUnitNickName(string Nickname)
     {
-        
+        _LeftPanelUnitNameText.text = _UnitName + " " + Nickname;
     }
 }

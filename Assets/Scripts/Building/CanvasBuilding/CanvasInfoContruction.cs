@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CanvasInfoContruction : MonoBehaviour
 {
-    [SerializeField] private ConstructionBuilding _ConstructionBuilding;
+    [SerializeField] private NeedResourcesBuilding _ConstructionBuilding;
     [SerializeField] private Text[] _RightPanelText;
 
     private Dictionary<ResourceType, int> res;
@@ -14,7 +14,7 @@ public class CanvasInfoContruction : MonoBehaviour
     {
         if (_ConstructionBuilding != null)
         {
-            _ConstructionBuilding.onResourcesUpdated += OnUpdateResoursece;
+            _ConstructionBuilding.OnResourcesUpdated += OnUpdateResoursece;
         }
     }
 
@@ -27,7 +27,7 @@ public class CanvasInfoContruction : MonoBehaviour
     {
         if (_ConstructionBuilding != null)
         {
-            _ConstructionBuilding.onResourcesUpdated -= OnUpdateResoursece;
+            _ConstructionBuilding.OnResourcesUpdated -= OnUpdateResoursece;
         }
     }
 

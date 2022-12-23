@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public enum ResourceType
-{
-    Stone,
-    Wood,
-    Steel,
-    Gold
-}
+
 public class StorageResources : Building
 {
 
-    private Dictionary<ResourceType, int> _ResourceTypes = new Dictionary<ResourceType, int>()
-    {
-        {ResourceType.Stone, 25},
-        {ResourceType.Wood, 25},
-        {ResourceType.Steel, 25},
-        {ResourceType.Gold, 25},
-    };
+    private Dictionary<ResourceType, int> _ResourceTypes = Resource.CreateDicRes();
 
-    private int[] _CountResources = new int[4];
+    private int[] _CountResources = new int[Resource._ResCount];
     private ResourceType _Type;
     public Action onResourcesUpdated;
 
@@ -29,7 +17,7 @@ public class StorageResources : Building
     {
         _ResourceTypes[type] += count;
         onResourcesUpdated?.Invoke();
-        ASFD();
+        CalculateCountResources();
     }
     public bool GetRes(ResourceType needType, int needCount )
     {
@@ -37,7 +25,7 @@ public class StorageResources : Building
         {
             _ResourceTypes[needType] -= needCount;
             onResourcesUpdated?.Invoke();
-            ASFD();
+            CalculateCountResources();
             return true;
         }
         else
@@ -58,7 +46,7 @@ public class StorageResources : Building
             return false;
         }
     }
-    private void ASFD()
+    private void CalculateCountResources()
     {
         _Type = ResourceType.Stone;
         for (int i = 0; i < _CountResources.Length; i++)

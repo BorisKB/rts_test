@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -5,30 +6,30 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent), typeof(Animator))]
+[RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(DamagableObject))]
 public class Unit : MonoBehaviour
 {
     protected NavMeshAgent _Agent;
     protected Animator _Animator;
+    protected DamagableObject _DamagableObject;
 
     [Header("Properites")]
-    [SerializeField] private int _MaxHealth;
-    [SerializeField] private int _Health;
-    [SerializeField] private int _Armor;
-    [SerializeField] private int _Damage;
+    [SerializeField] protected int _Damage;
+    [SerializeField] protected float _Speed;
     [SerializeField] private float _ChasingRange;
     [SerializeField] private float _AttackRange;
-    [SerializeField] private int _Team = 0;
     [SerializeField] private float _AttackRate;
+    [SerializeField] private int _Team = 0;
 
     [Header("Animation")]
     [SerializeField] private float _TimeToSendDamage;
 
-    private Unit _TargetEnemy;
-    private List<Unit> _TargetsEnemy;
+    private List<DamagableObject> _TargetsEnemy;
     private float _MinDistance;
+    private DamagableObject _CurrentTarget;
     private float _CurrentDistance;
     protected SoldierAI _SoldierAI;
+
 
     public NavMeshAgent GetAgent() { return _Agent; }
     public Animator GetAnimator() { return _Animator; }
@@ -38,51 +39,39 @@ public class Unit : MonoBehaviour
     public float GetAttackRange() { return _AttackRange; }
     public float GetAttackRate() { return _AttackRate; }
     public float GetTimeToSendDamage() { return _TimeToSendDamage; }
-    public Unit GetTarget() { return _TargetEnemy; }
-    public void SetTarget(Unit target) { _TargetEnemy = target; }
+
     protected virtual void Awake()
     {
         _Agent = GetComponent<NavMeshAgent>();
+        _Agent.speed = _Speed;
         _SoldierAI = GetComponent<SoldierAI>();
         _Animator = GetComponent<Animator>();
+        _DamagableObject = GetComponent<DamagableObject>();
+        _DamagableObject.OnDied += Death;
+        _DamagableObject.SetTeam(_Team);
     }
 
+    private void Update()
+    {
+        _Animator.SetFloat("Locomotion", _Agent.velocity.magnitude);
+    }
     public void Move(Vector3 position) 
     {
         _Agent.SetDestination(position);
         _SoldierAI.SetMoveState();
     }
-    public void ChasingTarget(Unit enemy) 
+    public void ChasingTarget(DamagableObject enemy) 
     {
-        _TargetEnemy = enemy;
-        _SoldierAI.SetChasingState();
+        _SoldierAI.SetTarget(enemy);
+        _SoldierAI.SetChasingCurrentTargetState();
     }
-    public virtual void AttackEnemy(Unit enemy) 
+    public virtual void AttackEnemy(DamagableObject enemy) 
     {
         enemy.TakeDamage(_Damage);
     }
-    public void TakeDamage(int amount)
+    public DamagableObject FindClosestTarget() 
     {
-        int damage;
-        if (_Armor > 0)
-        {
-            damage = Mathf.RoundToInt((float)amount / _Armor);
-        }
-        else
-        {
-            damage = amount;
-        }
-        damage = damage > 1 ? damage : 1;
-        _Health = math.max(_Health - damage, 0);
-
-        if(_Health == 0) 
-        {
-            Death();
-        }
-    }
-    public Unit FindClosestTarget() 
-    {
-        Unit currentTarget = null;
+        _CurrentTarget = null;
         _MinDistance = 1000f;
         if (_Team == 0)
         {
@@ -90,22 +79,22 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            _TargetsEnemy = BattleManager._Instance.GetAllFriendlyUnitsList();
+            _TargetsEnemy = BattleManager._Instance.GetAllFriendlyDamagableObjectsList();
         }
-        foreach (Unit target in _TargetsEnemy)
+        foreach (DamagableObject target in _TargetsEnemy)
         {
             _CurrentDistance = (target.transform.position - transform.position).sqrMagnitude;
             if(_CurrentDistance < _MinDistance)
             {
                 _MinDistance = _CurrentDistance;
-                currentTarget = target;
+                _CurrentTarget = target;
             }
         }
-        return currentTarget;
+        return _CurrentTarget;
     }
-    public Unit FindClosestTarget(float minDistance)
+    public DamagableObject FindClosestTarget(float minDistance)
     {
-        Unit currentTarget = null;
+        _CurrentTarget = null;
         _MinDistance = 1000f;
         if (_Team == 0)
         {
@@ -113,20 +102,20 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            _TargetsEnemy = BattleManager._Instance.GetAllFriendlyUnitsList();
+            _TargetsEnemy = BattleManager._Instance.GetAllFriendlyDamagableObjectsList();
         }
-        foreach (Unit target in _TargetsEnemy)
+        foreach (DamagableObject target in _TargetsEnemy)
         {
-            _CurrentDistance = (target.transform.position - transform.position).magnitude;
+            _CurrentDistance = (target.transform.position - transform.position).sqrMagnitude;
             if (_CurrentDistance < _MinDistance)
             {
                 _MinDistance = _CurrentDistance;
-                currentTarget = target;
+                _CurrentTarget = target;
             }
         }
         if (_MinDistance <= minDistance)
         {
-            return currentTarget;
+            return _CurrentTarget;
         }
         else
         {
@@ -134,11 +123,11 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void Death()
+    public virtual void Death()
     {
-        //some die
+        _DamagableObject.OnDied -= Death;
     }
-
+   
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {

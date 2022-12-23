@@ -95,9 +95,10 @@ GameObject:
   - component: {fileID: 3161485046694280328}
   - component: {fileID: 3161485046694280342}
   - component: {fileID: 3968881324195400156}
+  - component: {fileID: 1762196432093155342}
   m_Layer: 0
   m_Name: TestBuilding
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,15 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc14ddacea8c87140b98e5b34c78eeff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Price: 0
+  _Price: 
   _XSize: 2
   _ZSize: 2
-  _BuildingRenderer: {fileID: 4727536615257488450, guid: 8fdbbff5e58d0614fbc203075171f087,
-    type: 3}
   _CanvasInfo: {fileID: 0}
-  _BuildingBlockLayer:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!65 &3161485046694280342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -168,3 +164,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1762196432093155342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3161485046694280331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70be7e7e302e574459f0f21fa73e3477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _MaxHealth: 0
+  _Health: 100
+  _Armor: 0
+  _Team: 0

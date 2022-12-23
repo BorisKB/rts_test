@@ -8,7 +8,7 @@ public class StorageBuildingCanvasInfo : MonoBehaviour
     [SerializeField] private StorageResources _StorageResources;
     [SerializeField] private Text[] _RightPanelText;
 
-    private Dictionary<ResourceType, int> res;
+    private Dictionary<ResourceType, int> res = Resource.CreateDicRes();
     // Start is called before the first frame update
     void Start()
     {

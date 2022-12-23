@@ -23,18 +23,26 @@ public class Selector : MonoBehaviour
         PlayerInputManager._Instance.OnDownLeftClickMouse += OnDownLeftClick;
         PlayerInputManager._Instance.OnPressLeftClickMouse += OnPressLeftClick;
         PlayerInputManager._Instance.OnUpLeftClickMouse += OnUpLeftClick;
+        PlayerInputManager._Instance.OnPressEscape += UnselectAll;
+        BattleManager._Instance.OnSelectableDestroyed += ClearThisFromList;
     }
     private void OnDestroy()
     {
         PlayerInputManager._Instance.OnDownLeftClickMouse -= OnDownLeftClick;
         PlayerInputManager._Instance.OnPressLeftClickMouse -= OnPressLeftClick;
         PlayerInputManager._Instance.OnUpLeftClickMouse -= OnUpLeftClick;
+        PlayerInputManager._Instance.OnPressEscape -= UnselectAll;
+        BattleManager._Instance.OnSelectableDestroyed -= ClearThisFromList;
     }
 
     #region Input
-    private void OnDownLeftClick() 
+    private void UnselectAll()
     {
         ClearAllInList();
+    }
+    private void OnDownLeftClick() 
+    {
+        //ClearAllInList();
 
         _StartFrame = Input.mousePosition;
         Ray ray = _PlayerCamera.ScreenPointToRay(_StartFrame);
@@ -43,6 +51,7 @@ public class Selector : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             if (hit.collider.TryGetComponent(out ISelectable selectedGameObject) == false) return;
+            ClearAllInList();
             AddToList(selectedGameObject);
         }
     }
@@ -55,7 +64,7 @@ public class Selector : MonoBehaviour
         _SizeFrame = _MaxFrame - _MinFrame;
 
         if (_SizeFrame.magnitude < 15) return;
-
+        ClearAllInList();
         _FrameImage.enabled = true;
         _FrameImage.rectTransform.anchoredPosition = _MinFrame;
         _FrameImage.rectTransform.sizeDelta = _SizeFrame;
@@ -65,13 +74,16 @@ public class Selector : MonoBehaviour
     {
         Rect rect = new Rect(_MinFrame, _SizeFrame);
 
-        List<Unit> testUnits = BattleManager._Instance.GetAllFriendlyUnitsList();
+        List<DamagableObject> testUnits = BattleManager._Instance.GetAllFriendlyDamagableObjectsList();
         for (int i = 0; i < testUnits.Count; i++)
         {
             Vector2 screenPosition = _PlayerCamera.WorldToScreenPoint(testUnits[i].transform.position);
             if (rect.Contains(screenPosition))
             {
-                AddToList(testUnits[i].GetComponent<ISelectable>());
+                if (!testUnits[i].CompareTag("Building"))
+                {
+                    AddToList(testUnits[i].GetComponent<ISelectable>());
+                }
             }
         }
         _FrameImage.enabled = false;
@@ -94,6 +106,14 @@ public class Selector : MonoBehaviour
             selectedObject.UnSelected();
         }
         _SelectedObjects.Clear();
+    }
+    private void ClearThisFromList(ISelectable selectable)
+    {
+        if (_SelectedObjects.Contains(selectable))
+        {
+            selectable.UnSelected();
+            _SelectedObjects.Remove(selectable);
+        }
     }
     #endregion
 }

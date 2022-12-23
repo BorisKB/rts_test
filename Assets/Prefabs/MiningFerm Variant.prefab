@@ -152,8 +152,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MiningFerm Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3161485046694280331, guid: c16fd99c7b58e4e4a85cd98987b70eec,
+        type: 3}
+      propertyPath: m_TagString
+      value: Building
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3161485046694280328, guid: c16fd99c7b58e4e4a85cd98987b70eec, type: 3}
+    - {fileID: 1762196432093155342, guid: c16fd99c7b58e4e4a85cd98987b70eec, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c16fd99c7b58e4e4a85cd98987b70eec, type: 3}
 --- !u!1 &1094174762118104512 stripped
 GameObject:
@@ -173,15 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8756754dc7501794694fc44d2df9e650, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Price: 0
-  _XSize: 1
-  _ZSize: 1
-  _BuildingRenderer: {fileID: 4727536615257488450, guid: 8fdbbff5e58d0614fbc203075171f087,
-    type: 3}
   _CanvasInfo: {fileID: 8687916782608432492}
-  _BuildingBlockLayer:
-    serializedVersion: 2
-    m_Bits: 0
   _ResourceType: 3
   _Count: 15
 --- !u!4 &1094174762118104514 stripped

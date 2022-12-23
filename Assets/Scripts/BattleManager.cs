@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,49 +7,53 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager _Instance { get; private set; }
 
-    [SerializeField] private List<Unit> _AllFriendlyUnits = new List<Unit>();
-    [SerializeField] private List<Unit> _AllEnemyUnits = new List<Unit>();
+    [SerializeField] private List<DamagableObject> _AllFriendlyDamagableObjects = new List<DamagableObject>();
+    [SerializeField] private List<DamagableObject> _AllEnemyUnits = new List<DamagableObject>();
+
+    public Action<ISelectable> OnSelectableDestroyed;
 
     private void Awake()
     {
         _Instance = this;
     }
 
-
-    public List<Unit> GetAllFriendlyUnitsList() 
+    #region AllFriendlyDamagableObjects
+    public List<DamagableObject> GetAllFriendlyDamagableObjectsList() 
     {
-        return _AllFriendlyUnits;
+        return _AllFriendlyDamagableObjects;
     }
 
-    public void AddToAllFriendlyUnitsList(Unit unit)
+    public void AddToAllFriendlyObjectsList(DamagableObject damagableObject)
     {
-        if (_AllFriendlyUnits.Contains(unit))
+        if (!_AllFriendlyDamagableObjects.Contains(damagableObject))
         {
-            _AllFriendlyUnits.Add(unit);
+            _AllFriendlyDamagableObjects.Add(damagableObject);
         }
         else
         {
             Debug.Log("Try Add unit then already added");
         }
     }
-    public void RemoveToAllFriendlyUnitsList(Unit unit)
+    public void RemoveToAllFriendlyDamagableList(DamagableObject damagableObject)
     {
-        if (_AllFriendlyUnits.Contains(unit))
+        if (_AllFriendlyDamagableObjects.Contains(damagableObject))
         {
-            _AllFriendlyUnits.Remove(unit);
+            OnSelectableDestroyed?.Invoke(damagableObject.GetComponent<ISelectable>());
+            _AllFriendlyDamagableObjects.Remove(damagableObject);
         }
         else
         {
             Debug.Log("Try Remove unit then already Deleted");
         }
     }
-
-    public List<Unit> GetAllEnemyUnitsList()
+    #endregion
+    #region AllEnemyUnits
+    public List<DamagableObject> GetAllEnemyUnitsList()
     {
         return _AllEnemyUnits;
     }
 
-    public void AddToAllEnemyUnitsList(Unit unit)
+    public void AddToAllEnemyUnitsList(DamagableObject unit)
     {
         if (_AllEnemyUnits.Contains(unit))
         {
@@ -59,7 +64,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Try Add unit then already added");
         }
     }
-    public void RemoveToAllEnemyUnitsList(Unit unit)
+    public void RemoveToAllEnemyUnitsList(DamagableObject unit)
     {
         if (_AllEnemyUnits.Contains(unit))
         {
@@ -70,4 +75,5 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Try Remove unit then already Deleted");
         }
     }
+    #endregion
 }

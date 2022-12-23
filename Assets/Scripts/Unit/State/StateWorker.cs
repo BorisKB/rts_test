@@ -7,6 +7,7 @@ using UnityEngine;
 public class MiningState : StateWorker
 {
     private int _CountRes;
+    public Action OnMining;
     public override void StateStart()
     {
         _Timer = 0;
@@ -27,17 +28,35 @@ public class MiningState : StateWorker
             _CountRes = 0;
             _WorkerAI.SetCountRes(_CountRes);
         }
+        _Animator.SetBool("Run", true);
     }
     public override void StateUpdate()
     {
-        if (_MiningBuilding == null) { _WorkerAI.SetIdleState(); return; }
+        if (_MiningBuilding == null) 
+        { 
+            if(_WorkerAI.GetCountRes() > 0 && _StorageResources != null)
+            {
+                _WorkerAI.SetStorageState(_StorageResources);
+                return;
+            }
+            _WorkerAI.SetIdleState(); 
+            return;
+        }
         _Distance = (_MiningBuilding.transform.position - _TransformUnit.position).sqrMagnitude;
         if (_Distance <= 6)
         {
             _Timer += Time.deltaTime;
+            if (_Agent.hasPath)
+            {
+                _Animator.SetBool("Mining", true);
+                _Animator.SetBool("Run", false);
+                _Animator.transform.LookAt(_MiningBuilding.transform);
+                _Agent.ResetPath();
+            }
             if (_Timer >= _MiningRate)
             {
-                _CountRes += _MiningBuilding.GetResources(_ResourceType, 1) ? 1 : 0;
+                OnMining?.Invoke();
+                _CountRes += _MiningBuilding.GetResources(_ResourceType, _MiningPerIteration);
                 _WorkerAI.SetCountRes(_CountRes);
                 _Timer = 0;
             }
@@ -48,10 +67,14 @@ public class MiningState : StateWorker
         }
         if (_MaxCountTaken <= _CountRes)
         {
-            Debug.Log(_StorageResources);
             if (_StorageResources != null) { _WorkerAI.SetStorageState(_StorageResources); }
             else { _WorkerAI.SetIdleState(); ; }
         }
+    }
+    public override void StateExit()
+    {
+        _Animator.SetBool("Mining", false);
+        _Animator.SetBool("Run", false);
     }
 }
 public class BuildingState : StateWorker
@@ -60,13 +83,19 @@ public class BuildingState : StateWorker
     private int[] _ResourcesInStorage;
     public override void StateStart()
     {
-        _ConstructionBuilding = _WorkerAI.GetConstructionBuilding();
+        _NeedResourcesBuilding = _WorkerAI.GetNeedResourcesBuilding();
         _StorageResources = _WorkerAI.GetStorageResources();
-        if (_ConstructionBuilding == null) { _WorkerAI.SetIdleState(); return; }
+        if (_NeedResourcesBuilding == null) { _WorkerAI.SetIdleState(); return; }
+        _Animator.SetBool("Run", true);
     }
     public override void StateUpdate()
     {
-        if (_ConstructionBuilding == null) { _WorkerAI.SetIdleState(); return; }
+        if (_NeedResourcesBuilding == null || _StorageResources == null) { _WorkerAI.SetIdleState(); return; }
+        if(!_NeedResourcesBuilding.IsNeedResources()) 
+        {
+            _WorkerAI.SetBuildingState(null);
+            return;
+        }
 
         if(_WorkerAI.GetCountRes() == 0) 
         {
@@ -76,13 +105,20 @@ public class BuildingState : StateWorker
         }
 
 
-        _Distance = (_ConstructionBuilding.transform.position - _TransformUnit.position).sqrMagnitude;
+        _Distance = (_NeedResourcesBuilding.transform.position - _TransformUnit.position).sqrMagnitude;
         if (_Distance <= 6)
         {
-            if (isNeedCurrentRes(_WorkerAI.GetResourceType()))
+            if (IsNeedCurrentRes(_WorkerAI.GetResourceType()))
             {
                 SetNeedCurrentRes(_WorkerAI.GetResourceType(), _WorkerAI.GetCountRes());
-                SetNeedRes();
+                if (_WorkerAI.GetCountRes() == 0)
+                {
+                    SetNeedRes();
+                }
+                else
+                {
+                    _WorkerAI.SetNeedCountRes(0);
+                }
                 _WorkerAI.SetStorageState(_StorageResources);
                 return;
             }
@@ -94,13 +130,17 @@ public class BuildingState : StateWorker
         }
         else
         {
-            _Agent.SetDestination(_ConstructionBuilding.transform.position);
+            _Agent.SetDestination(_NeedResourcesBuilding.transform.position);
         }
     }
 
+    public override void StateExit()
+    {
+        _Animator.SetBool("Run", false);
+    }
     private void SetNeedRes()
     {
-        _NeedResources = _ConstructionBuilding.GetResourcesNeed();
+        _NeedResources = _NeedResourcesBuilding.GetResourcesNeed();
         _ResourcesInStorage = _StorageResources.GetResCount();
         int minNeedInStorage;
         ResourceType type = ResourceType.Stone;
@@ -113,14 +153,16 @@ public class BuildingState : StateWorker
                     minNeedInStorage = Math.Min(_ResourcesInStorage[i], _NeedResources[i]);
                     _WorkerAI.SetResourceType(type += i);
                     _WorkerAI.SetNeedCountRes(Math.Min(minNeedInStorage, _MaxCountTaken));
-                    break;
+                    return;
                 }
             }
         }
+        _WorkerAI.SetNeedCountRes(0);
+        _WorkerAI.SetBuildingState(null);
     }
     private void SetNeedCurrentRes(ResourceType currentType, int count)
     {
-        _NeedResources = _ConstructionBuilding.GetResourcesNeed();
+        _NeedResources = _NeedResourcesBuilding.GetResourcesNeed();
         ResourceType type = ResourceType.Stone;
         for (int i = 0; i < _NeedResources.Length; i++)
         {
@@ -130,21 +172,21 @@ public class BuildingState : StateWorker
                 {
                     if (_NeedResources[i] >= count)
                     {
-                        _ConstructionBuilding.SetRes(currentType, count);
+                        _NeedResourcesBuilding.SetRes(currentType, count);
                         _WorkerAI.SetCountRes(0);
                     }
                     else 
                     {
-                        _ConstructionBuilding.SetRes(currentType, _NeedResources[i]);
+                        _NeedResourcesBuilding.SetRes(currentType, _NeedResources[i]);
                         _WorkerAI.SetCountRes(count - _NeedResources[i]);
                     }
                 }
             }
         }
     }
-    private bool isNeedCurrentRes(ResourceType currentType)
+    private bool IsNeedCurrentRes(ResourceType currentType)
     {
-        _NeedResources = _ConstructionBuilding.GetResourcesNeed();
+        _NeedResources = _NeedResourcesBuilding.GetResourcesNeed();
         ResourceType type = ResourceType.Stone;
         for (int i = 0; i < _NeedResources.Length; i++)
         {
@@ -166,9 +208,10 @@ public class StorageState : StateWorker
     {
         _ResourceType = _WorkerAI.GetResourceType();
         _StorageResources = _WorkerAI.GetStorageResources();
-        _ConstructionBuilding = _WorkerAI.GetConstructionBuilding();
+        _NeedResourcesBuilding = _WorkerAI.GetNeedResourcesBuilding();
         _MiningBuilding = _WorkerAI.GetMiningBuilding();
         _CountRes = _WorkerAI.GetCountRes();
+        _Animator.SetBool("Run", true);
     }
     public override void StateUpdate()
     {
@@ -193,28 +236,32 @@ public class StorageState : StateWorker
             _Agent.SetDestination(_StorageResources.transform.position);
         }
     }
-    private void SetResource()//213
+    public override void StateExit()
+    {
+        _Animator.SetBool("Run", false);
+    }
+    private void SetResource()
     {
         _StorageResources.SetRes(_ResourceType, _CountRes);
         _CountRes = 0;
         _WorkerAI.SetCountRes(_CountRes);
-        if (_ConstructionBuilding != null) { _WorkerAI.SetBuildingState(_ConstructionBuilding); }
+        if (_NeedResourcesBuilding != null) { _WorkerAI.SetBuildingState(_NeedResourcesBuilding); }
         else if (_MiningBuilding != null) { _WorkerAI.SetMiningState(_MiningBuilding); }
         else { _WorkerAI.SetIdleState(); }
     }
     private void GetResource()
     {
-        if (_ConstructionBuilding != null)
+        if (_NeedResourcesBuilding != null)
         {
             if (_StorageResources.GetRes(_WorkerAI.GetResourceType(), _WorkerAI.GetNeedCountRes()))
             {
                 _WorkerAI.SetCountRes(_WorkerAI.GetNeedCountRes());
-                _WorkerAI.SetBuildingState(_ConstructionBuilding);
+                _WorkerAI.SetBuildingState(_NeedResourcesBuilding);
                 return;
             }
             else
             {
-                _WorkerAI.SetBuildingState(_ConstructionBuilding);
+                _WorkerAI.SetBuildingState(_NeedResourcesBuilding);
                 return;
             }
         }
@@ -225,30 +272,31 @@ public class StorageState : StateWorker
 public class StateWorker : State
 {
     protected Worker _Worker;
+    protected int _MiningPerIteration;
     protected float _MiningRate;
     protected ResourceType _ResourceType;
     protected int _MaxCountTaken;
     protected WorkerAI _WorkerAI;
     protected StorageResources _StorageResources;
     protected MiningBuilding _MiningBuilding;
-    protected ConstructionBuilding _ConstructionBuilding;
+    protected NeedResourcesBuilding _NeedResourcesBuilding;
 
-    public void Init(Unit unit ,Worker worker, Transform transform)
+    public override void Init(Unit unit, Transform transform)
     {
         _Unit = unit;
-        _Worker = worker;
+        _Worker = unit.GetComponent<Worker>();
         _TransformUnit = transform;
-        _WorkerAI = worker.GetWorkerAI();
+        _WorkerAI = _Worker.GetWorkerAI();
         _MiningRate = _Worker.GetMiningRate();
+        _MiningPerIteration = _Worker.GetMiningPerIteration();
         _MaxCountTaken = _Worker.GetMaxCountTaken();
         _Animator = _Unit.GetAnimator();
         _Agent = _Unit.GetAgent();
         _SoldierAI = _Unit.GetSoldierAI();
         _ChasingRange = _Unit.GetChasingRange();
-        _AttackRange = _Unit.GetAttackRange();
-        _TimeToSendDamage = _Unit.GetTimeToSendDamage();
+        _AttackRangeSqr = _Unit.GetAttackRange();
         _AttackRate = _Unit.GetAttackRate();
-        _AttackRange = _AttackRange * _AttackRange;
+        _AttackRangeSqr = _AttackRangeSqr * _AttackRangeSqr;
         _ChasingRange = _ChasingRange * _ChasingRange;
     }
 }

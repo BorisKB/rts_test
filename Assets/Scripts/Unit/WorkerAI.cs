@@ -8,11 +8,11 @@ public class WorkerAI : SoldierAI
     private Worker _Worker;
     private StorageResources _StorageResources;
     private MiningBuilding _MiningBuilding;
-    private ConstructionBuilding _ConstructionBuilding;
+    private NeedResourcesBuilding _NeedResourcesBuilding;
     [SerializeField] private ResourceType _ResourceType = 0;
-    protected StateWorker _MiningState = new MiningState();
-    protected StateWorker _BuildingState = new BuildingState();
-    protected StateWorker _StorageState = new StorageState();
+    protected MiningState _MiningState = new MiningState();
+    protected BuildingState _BuildingState = new BuildingState();
+    protected StorageState _StorageState = new StorageState();
 
     private int _Count = 0;
     private int _NeedCount = 0;
@@ -25,23 +25,41 @@ public class WorkerAI : SoldierAI
     public void SetResourceType(ResourceType type) { _ResourceType = type; }
     public StorageResources GetStorageResources() { return _StorageResources; }
     public MiningBuilding GetMiningBuilding() { return _MiningBuilding; }
-    public ConstructionBuilding GetConstructionBuilding() { return _ConstructionBuilding; }
+    public NeedResourcesBuilding GetNeedResourcesBuilding() { return _NeedResourcesBuilding; }
     protected override void Start()
     {
         base.Start();
         _Worker = GetComponent<Worker>();
-        _MiningState.Init(_Unit, _Worker, transform);
-        _BuildingState.Init(_Unit, _Worker, transform);
-        _StorageState.Init(_Unit, _Worker, transform);
+        _MiningState.OnMining += CheckTrait;
+    }
+    public override void Initialization()
+    {
+        base.Initialization();
+        _MiningState.Init(_Unit, transform);
+        _BuildingState.Init(_Unit, transform);
+        _StorageState.Init(_Unit, transform);
+    }
+    private void OnDestroy()
+    {
+        _MiningState.OnMining -= CheckTrait;
+    }
+
+    private void CheckTrait()
+    {
+        if(Random.Range(0, 100) == 1)
+        {
+            Debug.Log("GetWorkerTrait");
+            _Worker.SetTraitWorker(TraitsContainer._Instance.WorkerTraits[Random.Range(0, TraitsContainer._Instance.WorkerTraits.Count)]);
+        }
     }
     public void SetMiningState(MiningBuilding miningBuilding)
     {
         _MiningBuilding = miningBuilding;
         SetState(_MiningState);
     }
-    public void SetBuildingState(ConstructionBuilding constructionBuilding)
+    public void SetBuildingState(NeedResourcesBuilding building)
     {
-        _ConstructionBuilding = constructionBuilding;
+        _NeedResourcesBuilding = building;
         SetState(_BuildingState);
     }
     public void SetStorageState(StorageResources storageResources)
