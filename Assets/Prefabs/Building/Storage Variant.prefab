@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a353bc09bb65b94cb853840e6d15b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Price: 0f000000070000000400000005000000
+  _Price: 02000000020000000200000002000000
   _XSize: 1
   _ZSize: 1
   _CanvasInfo: {fileID: 235899074361135683}

@@ -94,10 +94,10 @@ GameObject:
   - component: {fileID: 1915480987355942078}
   - component: {fileID: 1915480987355942079}
   - component: {fileID: 1915480987355942072}
-  - component: {fileID: 8377114757946517239}
   - component: {fileID: 4689157165262021678}
+  - component: {fileID: -5032344141801201063}
   m_Layer: 0
-  m_Name: BaseSpawnBulding
+  m_Name: ConstructersSpawnUnitBuilding
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3003773114599006184}
-  - {fileID: 7208651049031513420}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -206,7 +205,7 @@ MonoBehaviour:
   _BuildingBlockLayer:
     serializedVersion: 2
     m_Bits: 1
-  _NeedsResourcesBuilding: {fileID: 8377114757946517239}
+  _NeedsResourcesBuilding: {fileID: -5032344141801201063}
   _PricesRes: 0a0000000a0000000000000000000000
 --- !u!208 &1915480987355942072
 NavMeshObstacle:
@@ -224,19 +223,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &8377114757946517239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915480987355942073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c639e57b28c0d6042bc872912c0dac87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _PricesRes: 00000000000000000000000000000000
 --- !u!114 &4689157165262021678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,43 +236,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _MaxHealth: 0
-  _Health: 15
+  _Health: 100
   _Armor: 0
   _Team: 0
-  _HealthBarPosition: {fileID: 7208651049031513420}
+  _HealthBarPosition: {fileID: 1915480987355942067}
   _HealthBarPrefab: {fileID: 7819996356329087528, guid: 7bb71a76fb289c64e9eaa18df09157b5,
     type: 3}
---- !u!1 &7349456345184188551
-GameObject:
+--- !u!114 &-5032344141801201063
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7208651049031513420}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7208651049031513420
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7349456345184188551}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1915480987355942067}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1915480987355942073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c639e57b28c0d6042bc872912c0dac87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PricesRes: 00000000000000000000000000000000
 --- !u!1001 &3163448787085834502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -603,7 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c83e74ce5e76a4c972e9a9ea730451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ConstructionBuilding: {fileID: 8377114757946517239}
+  _ConstructionBuilding: {fileID: -5032344141801201063}
   _RightPanelText:
   - {fileID: 4279761504952902650}
   - {fileID: 2815010486419670385}

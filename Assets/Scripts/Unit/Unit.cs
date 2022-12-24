@@ -106,7 +106,7 @@ public class Unit : MonoBehaviour
         }
         foreach (DamagableObject target in _TargetsEnemy)
         {
-            _CurrentDistance = (target.transform.position - transform.position).sqrMagnitude;
+            _CurrentDistance = (target.transform.position - transform.position).sqrMagnitude; 
             if (_CurrentDistance < _MinDistance)
             {
                 _MinDistance = _CurrentDistance;
