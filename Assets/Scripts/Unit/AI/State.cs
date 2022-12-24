@@ -42,12 +42,17 @@ public class MoveState : State
     {
         _Animator.SetBool("Run", true);
         _Agent.stoppingDistance = _StoppingDistance;
+        _Timer = 0;
     }
     public override void StateUpdate()
     {
-        if (_Agent.remainingDistance <= _StoppingDistance)
+        _Timer += Time.deltaTime;
+        if (_Timer > 0.15f)
         {
-            _SoldierAI.SetIdleState();
+            if ((_Agent.pathEndPosition - _SoldierAI.transform.position).sqrMagnitude <= _StoppingDistance * _StoppingDistance)
+            {
+                _SoldierAI.SetIdleState();
+            }
         }
     }
     public override void StateExit()
