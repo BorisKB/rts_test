@@ -202,17 +202,17 @@ PrefabInstance:
     - target: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.79401
+      value: 3.2484865
       objectReference: {fileID: 0}
     - target: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0000009536743
       objectReference: {fileID: 0}
     - target: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.6948023
+      value: -1.0196586
       objectReference: {fileID: 0}
     - target: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,
         type: 3}
@@ -289,4 +289,16 @@ MonoBehaviour:
   _Price: 02000000020000000200000002000000
   _XSize: 1
   _ZSize: 1
+--- !u!114 &5522033775959432293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727776271381054155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96d53141ec50e74b8645f955d64407d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _CanvasInfo: {fileID: 235899074361135683}

@@ -17,11 +17,14 @@ public class UnitCanvasInfo : MonoBehaviour
         _UnitName = NameGiver.GetRandomNameUnit();
         _UnitNickname = NameGiver.GetRandomNicknameUnit();
         _LeftPanelUnitNameText.text = _UnitName;   
-        _LeftPanelImage.sprite = _LeftPanelUnitIcon;
     }
 
     public void SetUnitNickName(string Nickname)
     {
         _LeftPanelUnitNameText.text = _UnitName + " " + Nickname;
+    }
+    public void SetIcon(Sprite icon)
+    {
+        _LeftPanelImage.sprite = icon;
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MiningBuilding : MonoBehaviour, ISelectable
 {
-    [SerializeField] private GameObject _CanvasInfo;
     [SerializeField] private ResourceType _ResourceType;
     [SerializeField] private int _Count;
 
@@ -36,14 +35,9 @@ public class MiningBuilding : MonoBehaviour, ISelectable
 
     public void Selected()
     {
-        _CanvasInfo.SetActive(true);
     }
 
     public void UnSelected()
     {
-        if (_CanvasInfo != null)
-        {
-            _CanvasInfo.SetActive(false);
-        }
     }
 }

@@ -10,7 +10,6 @@ public class Building : MonoBehaviour, ISelectable
     [SerializeField] private int[] _Price = new int[Resource._ResCount];
     [SerializeField] private int _XSize = 1;
     [SerializeField] private int _ZSize = 1;
-    [SerializeField] private GameObject _CanvasInfo;
 
     private DamagableObject _DamagableObject;
 
@@ -23,18 +22,10 @@ public class Building : MonoBehaviour, ISelectable
 
     public void Selected()
     {
-        if (_CanvasInfo != null)
-        {
-            _CanvasInfo.SetActive(true);
-        }
     }
 
     public void UnSelected()
     {
-        if (_CanvasInfo != null)
-        {
-            _CanvasInfo.SetActive(false);
-        }
     }
 
     protected virtual void Death()

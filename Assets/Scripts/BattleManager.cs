@@ -10,7 +10,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private List<DamagableObject> _AllFriendlyDamagableObjects = new List<DamagableObject>();
     [SerializeField] private List<DamagableObject> _AllEnemyUnits = new List<DamagableObject>();
 
-    public Action<ISelectable> OnSelectableDestroyed;
+    public Action<ISelectable, DamagableObject> OnSelectableDestroyed;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class BattleManager : MonoBehaviour
     {
         if (_AllFriendlyDamagableObjects.Contains(damagableObject))
         {
-            OnSelectableDestroyed?.Invoke(damagableObject.GetComponent<ISelectable>());
+            OnSelectableDestroyed?.Invoke(damagableObject.GetComponent<ISelectable>(), damagableObject);
             _AllFriendlyDamagableObjects.Remove(damagableObject);
         }
         else

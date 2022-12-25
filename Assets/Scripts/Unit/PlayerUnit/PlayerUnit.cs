@@ -6,13 +6,17 @@ using UnityEngine;
 public class PlayerUnit : Unit, ISelectable
 {
     [SerializeField] private GameObject _SeletctedInfo;
-    [SerializeField] private GameObject _CanvasInfo;
+    [SerializeField] private UnitCanvasInfo _UnitCanvasInfo;
+    [SerializeField] private Sprite _Icon;
 
     public Action<int, int, float> OnStatsChanged;
     protected bool isAlreadyHaveTrait = false;
+
+    public Sprite GetIcon() { return _Icon; }
     void Start()
     {
         _SeletctedInfo.SetActive(false);
+        _UnitCanvasInfo.SetIcon(_Icon);
     }
     public void SetTrait(TraitBase trait)
     {
@@ -22,7 +26,7 @@ public class PlayerUnit : Unit, ISelectable
         _Agent.speed = _Speed;
         _DamagableObject.SetArmor(trait.Armor + _DamagableObject.GetArmor());
         _DamagableObject.SetMaxHealth(trait.MaxHealth + _DamagableObject.GetMaxHealth());
-        _CanvasInfo.GetComponent<UnitCanvasInfo>().SetUnitNickName(trait.nickName);
+        _UnitCanvasInfo.SetUnitNickName(trait.nickName);
         _SoldierAI.Initialization();
         SetStatsUI();
     }
@@ -44,7 +48,6 @@ public class PlayerUnit : Unit, ISelectable
     public virtual void Selected()
     {
         _SeletctedInfo.SetActive(true);
-        _CanvasInfo.SetActive(true);
         Commander.MovePosition += Move;
         Commander.AttackEnemy += ChasingTarget;
     }
@@ -52,7 +55,6 @@ public class PlayerUnit : Unit, ISelectable
     public virtual void UnSelected()
     {
         _SeletctedInfo.SetActive(false);
-        _CanvasInfo.SetActive(false);
         Commander.MovePosition -= Move;
         Commander.AttackEnemy -= ChasingTarget;
     }

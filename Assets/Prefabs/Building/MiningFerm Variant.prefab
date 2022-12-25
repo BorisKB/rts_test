@@ -182,6 +182,21 @@ MonoBehaviour:
   _CanvasInfo: {fileID: 8687916782608432492}
   _ResourceType: 3
   _Count: 15
+  _ParticleFxPrefab: {fileID: 0}
+  _ParticleFxPosition: {fileID: 0}
+--- !u!114 &2673726799972969652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094174762118104512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96d53141ec50e74b8645f955d64407d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CanvasInfo: {fileID: 8687916782608432492}
 --- !u!4 &1094174762118104514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,

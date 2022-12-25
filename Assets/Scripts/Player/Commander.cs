@@ -37,7 +37,8 @@ public class Commander : MonoBehaviour
         {
             if (hit.collider.CompareTag("Ground"))
             {
-                MovePosition?.Invoke(hit.point);
+                MoveSquad.SetMovePosition(hit.point);
+                //MovePosition?.Invoke(hit.point);
                 if (particle != null) { Destroy(particle.gameObject); }
                 particle = Instantiate(_ClickOnGround, hit.point, Quaternion.identity);
             }

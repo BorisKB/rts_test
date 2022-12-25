@@ -21,6 +21,7 @@ public class DamagableObject : MonoBehaviour
     public int GetArmor() { return _Armor; }
     public void SetArmor(int value) { _Armor = value; }
     public int GetMaxHealth() { return _MaxHealth; }
+    public int GetHealth() { return _Health; }
     public void SetMaxHealth(int value) { _MaxHealth = value; OnHealthChanged?.Invoke(_Health, _MaxHealth); }
     private void Start()
     {

@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 4629051575629173893}
   - component: {fileID: 1634738764500255363}
   - component: {fileID: 8597753460970398858}
+  - component: {fileID: 8588429844313921501}
   m_Layer: 0
   m_Name: SpawnUnitBuilding
   m_TagString: Building
@@ -426,7 +427,6 @@ MonoBehaviour:
   _Price: 01000000010000000100000001000000
   _XSize: 1
   _ZSize: 1
-  _CanvasInfo: {fileID: 691279362084504015}
   _Buttons:
   - {fileID: 6579489334453809836}
   - {fileID: 1838413208}
@@ -495,6 +495,19 @@ MonoBehaviour:
   _HealthBarPosition: {fileID: 1451424428620265102}
   _HealthBarPrefab: {fileID: 7819996356329087528, guid: 7bb71a76fb289c64e9eaa18df09157b5,
     type: 3}
+--- !u!114 &8588429844313921501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174785343012840105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96d53141ec50e74b8645f955d64407d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CanvasInfo: {fileID: 691279362084504015}
 --- !u!1 &6418016998410126937
 GameObject:
   m_ObjectHideFlags: 0

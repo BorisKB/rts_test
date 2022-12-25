@@ -277,7 +277,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 1
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -324,10 +324,24 @@ MonoBehaviour:
   _Team: 0
   _TimeToSendDamage: 1
   _SeletctedInfo: {fileID: 4851739651074005185}
-  _CanvasInfo: {fileID: 1879579374466948306}
+  _UnitCanvasInfo: {fileID: 6968191027248026884}
+  _Icon: {fileID: 21300000, guid: 70632ddfe8e71b04b8f90ef7e29a9e98, type: 3}
   _ProjectilePrefab: {fileID: 6022118508843267859, guid: 31fd3d3c6457b714d8e62ba90b1fbb0d,
     type: 3}
   _ProjectileSpawnPosition: {fileID: 1469757267}
+--- !u!114 &8483230003804233502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3684590689031200434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96d53141ec50e74b8645f955d64407d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CanvasInfo: {fileID: 1879579374466948306}
 --- !u!4 &4064950670906278920 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9836557ce3adb484e970f38120c44a96,
@@ -484,3 +498,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4603561058718678307}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6968191027248026884 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6868234303337244711, guid: ebd226c46048b64498115a1dd64f6393,
+    type: 3}
+  m_PrefabInstance: {fileID: 4603561058718678307}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879579374466948306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dcaf7146e06dbf4eb114df3428f4f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
