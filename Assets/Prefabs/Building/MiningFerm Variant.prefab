@@ -167,23 +167,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2661789834511956299}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5418961688244657180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094174762118104512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8756754dc7501794694fc44d2df9e650, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _CanvasInfo: {fileID: 8687916782608432492}
-  _ResourceType: 3
-  _Count: 15
-  _ParticleFxPrefab: {fileID: 0}
-  _ParticleFxPosition: {fileID: 0}
 --- !u!114 &2673726799972969652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +180,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CanvasInfo: {fileID: 8687916782608432492}
+--- !u!114 &5418961688244657180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094174762118104512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8756754dc7501794694fc44d2df9e650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ResourceType: 3
+  _Count: 15
+  _ParticleFxPrefab: {fileID: 0}
+  _ParticleFxPosition: {fileID: 0}
+--- !u!114 &9215754476542685867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094174762118104512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70be7e7e302e574459f0f21fa73e3477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _MaxHealth: 0
+  _Health: 0
+  _Armor: 0
+  _Team: 0
+  _HealthBarPosition: {fileID: 0}
+  _HealthBarPrefab: {fileID: 0}
 --- !u!4 &1094174762118104514 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3161485046694280329, guid: c16fd99c7b58e4e4a85cd98987b70eec,

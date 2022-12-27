@@ -12,6 +12,7 @@ public class CanvasInfo : MonoBehaviour
 
     public void SetActiveCanvasInfo(bool state)
     {
+        if(_CanvasInfo == null) { return; }
         _CanvasInfo.SetActive(state);
     }
 }

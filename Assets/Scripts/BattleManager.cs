@@ -10,6 +10,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private List<DamagableObject> _AllFriendlyDamagableObjects = new List<DamagableObject>();
     [SerializeField] private List<DamagableObject> _AllEnemyUnits = new List<DamagableObject>();
 
+    public List<Building> _Buildings = new List<Building>();
+
     public Action<ISelectable, DamagableObject> OnSelectableDestroyed;
 
     private void Awake()
@@ -28,6 +30,10 @@ public class BattleManager : MonoBehaviour
         if (!_AllFriendlyDamagableObjects.Contains(damagableObject))
         {
             _AllFriendlyDamagableObjects.Add(damagableObject);
+            if(damagableObject.CompareTag("Building"))
+            {
+                _Buildings.Add(damagableObject.GetComponent<Building>());
+            }
         }
         else
         {
@@ -40,6 +46,10 @@ public class BattleManager : MonoBehaviour
         {
             OnSelectableDestroyed?.Invoke(damagableObject.GetComponent<ISelectable>(), damagableObject);
             _AllFriendlyDamagableObjects.Remove(damagableObject);
+            if (damagableObject.CompareTag("Building"))
+            {
+                _Buildings.Remove(damagableObject.GetComponent<Building>());
+            }
         }
         else
         {
@@ -55,7 +65,7 @@ public class BattleManager : MonoBehaviour
 
     public void AddToAllEnemyUnitsList(DamagableObject unit)
     {
-        if (_AllEnemyUnits.Contains(unit))
+        if (!_AllEnemyUnits.Contains(unit))
         {
             _AllEnemyUnits.Add(unit);
         }

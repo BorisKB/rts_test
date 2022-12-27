@@ -26,8 +26,11 @@ public class DamagableObject : MonoBehaviour
     private void Start()
     {
         if(_MaxHealth == 0) { _MaxHealth = _Health; }
-        HealthBar healthBar = Instantiate(_HealthBarPrefab, transform.position, quaternion.identity);
-        healthBar.Setup(_HealthBarPosition, this);
+        if (_HealthBarPrefab != null)
+        {
+            HealthBar healthBar = Instantiate(_HealthBarPrefab, transform.position, quaternion.identity);
+            healthBar.Setup(_HealthBarPosition, this);
+        }
     }
 
     public void TakeDamage(int amount)

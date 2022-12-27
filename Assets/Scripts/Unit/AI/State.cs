@@ -20,6 +20,8 @@ public class IdleState : State
         _Timer = 0f;
         _CurrentTarget = _SoldierAI.GetTarget();
         _Agent.stoppingDistance = _StoppingDistance;
+        _Agent.ResetPath();
+        _Agent.velocity = Vector3.zero;
     }
     public override void StateUpdate()
     {
@@ -34,6 +36,40 @@ public class IdleState : State
             _SoldierAI.SetTarget(_CurrentTarget);
             _SoldierAI.SetChasingState();
         }
+    }
+}
+public class MoveCheckState : State
+{
+    public override void StateStart()
+    {
+        _Animator.SetBool("Run", true);
+        _Agent.stoppingDistance = _StoppingDistance;
+        _Timer = 0;
+    }
+    public override void StateUpdate()
+    {
+        _Timer += Time.deltaTime;
+        if (_Timer > 0.15f)
+        {
+            if ((_Agent.pathEndPosition - _SoldierAI.transform.position).sqrMagnitude <= _StoppingDistance * _StoppingDistance)
+            {
+                _SoldierAI.SetIdleState();
+            }
+        }
+        if (_Timer > 1)
+        {
+            _Timer = 0;
+            _CurrentTarget = _Unit.FindClosestTarget(_ChasingRange);
+        }
+        if (_CurrentTarget != null)
+        {
+            _SoldierAI.SetTarget(_CurrentTarget);
+            _SoldierAI.SetChasingState();
+        }
+    }
+    public override void StateExit()
+    {
+        _Animator.SetBool("Run", false);
     }
 }
 public class MoveState : State
@@ -99,34 +135,70 @@ public class ChasingState : State
     {
         _CurrentTarget = _SoldierAI.GetTarget();
         _Agent.stoppingDistance = _AttackRange - 0.5f;
+        if(_CurrentTarget != null)
+        {
+            switch (CheckDistance(_CurrentTarget.transform))
+            {
+                case 0:
+                    {
+                        _Agent.stoppingDistance = _StoppingDistance;
+                        _SoldierAI.SetAttackState();
+                        return;
+                    }
+                case 1:
+                    {
+                        _Agent.SetDestination(_CurrentTarget.transform.position);
+                        break;
+                    }
+                case 2:
+                    {
+                        _SoldierAI.SetTarget(null);
+                        _SoldierAI.SetIdleState();
+                        return;
+                    }
+            }
+        }
         _Animator.SetBool("Chasing", true);
     }
     public override void StateUpdate()
     {
         if (_CurrentTarget == null) {  _Agent.stoppingDistance = _StoppingDistance; _SoldierAI.SetIdleState(); return; }
 
-        _Distance = (_CurrentTarget.transform.position - _TransformUnit.position).sqrMagnitude;
+        switch (CheckDistance(_CurrentTarget.transform))
+        {
+            case 0:
+                {
+                    _Agent.stoppingDistance = _StoppingDistance;
+                    _SoldierAI.SetAttackState();
+                    break;
+                }
+            case 1:
+                {
+                    _Agent.SetDestination(_CurrentTarget.transform.position);
+                    break;
+                }
+            case 2:
+                {
+                    _SoldierAI.SetTarget(null);
+                    _SoldierAI.SetIdleState();
+                    break;
+                }
+        }
+    }
+
+    private int CheckDistance(Transform target)
+    {
+        _Distance = (target.position - _TransformUnit.position).sqrMagnitude;
         if (_Distance < _ChasingRange)
         {
-            if (_Distance <= _AttackRangeSqr)
-            {
-                _Agent.stoppingDistance = _StoppingDistance;
-                _SoldierAI.SetAttackState();
-            }
-            else
-            {
-                _Agent.SetDestination(_CurrentTarget.transform.position);
-            }
+            if (_Distance <= _AttackRangeSqr) { return 0; }
+            else { return 1; }
         }
-        else
-        {
-            _SoldierAI.SetTarget(null);
-            _SoldierAI.SetIdleState();
-        }
+        else { return 2; }
     }
     public override void StateExit()
     {
-            _Animator.SetBool("Chasing", false);
+        _Animator.SetBool("Chasing", false);
     }
 }
 public class AttackState : State

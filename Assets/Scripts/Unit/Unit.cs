@@ -60,6 +60,11 @@ public class Unit : MonoBehaviour
         _Agent.SetDestination(position);
         _SoldierAI.SetMoveState();
     }
+    public void MoveCheck(Vector3 position)
+    {
+        _Agent.SetDestination(position);
+        _SoldierAI.SetMoveCheckState();
+    }
     public void ChasingTarget(DamagableObject enemy) 
     {
         _SoldierAI.SetTarget(enemy);
@@ -75,10 +80,12 @@ public class Unit : MonoBehaviour
         _MinDistance = 1000f;
         if (_Team == 0)
         {
+            if(BattleManager._Instance.GetAllEnemyUnitsList().Count == 0) { return null; }
             _TargetsEnemy = BattleManager._Instance.GetAllEnemyUnitsList();
         }
         else
         {
+            if (BattleManager._Instance.GetAllFriendlyDamagableObjectsList().Count == 0) { return null; }
             _TargetsEnemy = BattleManager._Instance.GetAllFriendlyDamagableObjectsList();
         }
         foreach (DamagableObject target in _TargetsEnemy)
@@ -98,10 +105,12 @@ public class Unit : MonoBehaviour
         _MinDistance = 1000f;
         if (_Team == 0)
         {
+            if (BattleManager._Instance.GetAllEnemyUnitsList().Count == 0) { return null; }
             _TargetsEnemy = BattleManager._Instance.GetAllEnemyUnitsList();
         }
         else
         {
+            if (BattleManager._Instance.GetAllFriendlyDamagableObjectsList().Count == 0) { return null; }
             _TargetsEnemy = BattleManager._Instance.GetAllFriendlyDamagableObjectsList();
         }
         foreach (DamagableObject target in _TargetsEnemy)

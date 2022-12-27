@@ -18,7 +18,6 @@ public class Selector : MonoBehaviour
 
     private List<ISelectable> _SelectedObjects = new List<ISelectable>();
     private List<DamagableObject> _SelectedDamagableObjects = new List<DamagableObject>();
-
     public static Action<List<DamagableObject>> OnSelectedDamagableObjectUpdated;
 
     private void Start()
@@ -55,6 +54,7 @@ public class Selector : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             if (hit.collider.TryGetComponent(out DamagableObject selectedDamagableGameObject) == false) return;
+            if (selectedDamagableGameObject.GetTeam() != 0) return;
             ClearAllInList();
             AddToList(selectedDamagableGameObject.GetComponent<ISelectable>(), selectedDamagableGameObject);
             if (selectedDamagableGameObject.TryGetComponent(out Unit unit))

@@ -10,6 +10,7 @@ public class MiningBuilding : MonoBehaviour, ISelectable
     [SerializeField] private ParticleFx _ParticleFxPrefab;
     [SerializeField] private Transform _ParticleFxPosition;
     public Action<int> OnResourcesUpdated;
+    private CanvasInfo _CanvasInfo;
     public ResourceType GetResourceType() { return _ResourceType; }
     public int GetResources(ResourceType type, int count)
     {
@@ -27,6 +28,10 @@ public class MiningBuilding : MonoBehaviour, ISelectable
         }
         return 0;
     }
+    private void Awake()
+    {
+        _CanvasInfo = GetComponent<CanvasInfo>();    
+    }
 
     private void DestroyBuilding()
     {
@@ -35,9 +40,11 @@ public class MiningBuilding : MonoBehaviour, ISelectable
 
     public void Selected()
     {
+        _CanvasInfo.SetActiveCanvasInfo(true);
     }
 
     public void UnSelected()
     {
+        _CanvasInfo.SetActiveCanvasInfo(false);
     }
 }

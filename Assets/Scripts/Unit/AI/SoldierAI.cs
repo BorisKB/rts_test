@@ -11,6 +11,7 @@ public class SoldierAI : MonoBehaviour
 
     protected State _IdleState = new IdleState();
     protected State _MoveState = new MoveState();
+    protected State _MoveCheckState = new MoveCheckState();
     protected State _ChasingState = new ChasingState();
     protected State _ChasingCurrentTargetState = new ChasingCurrentTargetState();
     protected State _AttackState = new AttackState();
@@ -29,6 +30,7 @@ public class SoldierAI : MonoBehaviour
     {
         _IdleState.Init(_Unit, transform);
         _MoveState.Init(_Unit, transform);
+        _MoveCheckState.Init(_Unit, transform);
         _ChasingState.Init(_Unit, transform);
         _ChasingCurrentTargetState.Init(_Unit, transform);
         _AttackState.Init(_Unit, transform);
@@ -51,6 +53,10 @@ public class SoldierAI : MonoBehaviour
     public void SetMoveState()
     {
         SetState(_MoveState);
+    }
+    public void SetMoveCheckState()
+    {
+        SetState(_MoveCheckState);
     }
     public void SetChasingState()
     {
